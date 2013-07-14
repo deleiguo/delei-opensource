@@ -5,8 +5,9 @@
 //   功能：合并表格   
 //   参数：tb－－需要合并的表格ID   
 //   参数：colLength－－需要对前几列进行合并，比如，   
-//   想合并前两列，后面的数据列忽略合并，colLength应为2      
-///////////////////////////////////////////////   
+//   想合并前两列，后面的数据列忽略合并，colLength应为2   
+//   该方法中使用的是innerHTML,各游览器间有差异   
+/////////////////////////////////////////////// 
 function cosplantable(tb, colLength) {
 	//   检查表格是否规整   
 	var tableId = tb;
@@ -64,7 +65,7 @@ function cosplantable(tb, colLength) {
 				}
 				obj2 = document.getElementById("tb_" + j.toString() + "_" + i.toString());
 				//alert(textTrim(obj1.innerText) + "==" + textTrim(obj2.innerText));
-				if (obj1 != null && obj2 != null && textTrim(obj1.innerText) == textTrim(obj2.innerText)) {
+				if (obj1 != null && obj2 != null && textTrim(obj1.innerHTML) == textTrim(obj2.innerHTML)) {
 					if (i > 0) {
 						var flag = checkArray(objtemp1, objtemp2);
 						if (flag) {
@@ -93,25 +94,19 @@ function cosplantable(tb, colLength) {
 	}
 }
 
-/////////////////////////////////////////   
-// 功能：检查表格是否规整
-// 参数：tb－－需要检查的表格ID
-// ///////////////////////////////////////
-function checkTab(tb) {
-	if (tb.rows.length == 0) {
-		return false;
-	}
-	//如果只有一行表头也返回false
-	if (tb.rows.length == 1) {
-		return false;
-	}
-	if (tb.rows[0].cells.length == 0) {
-		return false;
-	}
-	for ( var i = 0; i < tb.rows.length - 1; i++) {
-		if (tb.rows[0].cells.length != tb.rows[i].cells.length) {
-			return false;
+//检查取出的值是否相等
+function checkArray(arr1, arr2) {
+	var flag = true;
+	for (i = 1; i < arr1.length; i++) {
+		//alert(textTrim(arr1[i].innerText) + "/" + textTrim(arr2[i].innerText));
+		if (arr1[i]!=null && arr2[i]!=null && textTrim(arr1[i].innerHTML) != textTrim(arr2[i].innerHTML)) {
+			flag = false;
+			break;
 		}
 	}
-	return true;
+	return flag;
+}
+//去处左右空格
+function textTrim(text) {
+	return text.replace(/(^\s*)|(\s*$)/g, "");
 }
